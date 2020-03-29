@@ -15,6 +15,9 @@
 #include <vector>
 #include <iostream>
 
+#include "EventDelegate.h"
+#include "Events/Events.h"
+
 #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
 #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
 
@@ -26,8 +29,19 @@ namespace Engine {
         ALuint sourceHorn;
         ALuint sourceAcceleration;
         ALuint sourceBreaking;
+        ALuint sourceMusic;
+        ALuint sourceMenuMusic;
+        ALuint sourcePassengerDelivered;
+        ALuint sourceCollision;
 
     public:
+       
+        std::shared_ptr<EventHandler<int>> onKeyPressHandler;
+        std::shared_ptr<EventHandler<int>> onKeyDownHandler;
+        std::shared_ptr<EventHandler<int>> onKeyUpHandler;
+
+        float volume = 0.5;
+        
         void initialize() override;
         void update(Engine::deltaTime /*elapsed*/) override;
 
@@ -158,9 +172,19 @@ namespace Engine {
             std::int32_t& sampleRate,
             std::uint8_t& bitsPerSample,
             ALsizei& size);
+        
+        
         ALuint load_sound(std::string s);
+        ALuint load_looping_sound(std::string);
         int playSound(ALuint s);
+        int stopSound(ALuint s);
     
+        void volumeUp();
+        void volumeDown();
+
+        void onKeyDown(const Component::EventArgs<int>& args);
+        void onKeyUp(const Component::EventArgs<int>& args);
+        void onKeyPress(const Component::EventArgs<int>& args);
     };
 }
 

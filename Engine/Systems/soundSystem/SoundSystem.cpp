@@ -5,6 +5,8 @@
 #include <EngineDebug.hpp>
 #include "SoundSystem.h"
 #include "Sound.h"
+#include "GLFW/glfw3.h"
+
 
 
 
@@ -36,31 +38,20 @@ void Engine::SoundSystem::initialize() {
     sourceHorn = load_sound("Assets/Sounds/CARHORN4.wav");
     sourceAcceleration = load_looping_sound("Assets/Sounds/car+geardown.wav");
     sourceBreaking = load_sound("Assets/Sounds/TIRE+SKID.wav");
-    sourceMusic = load_looping_sound("Assets/Sounds/backGroundMusic.wav");
-    sourceDriving = load_looping_sound("Assets/Sounds/carMoving.wav");
+    sourceMusic = load_looping_sound("Assets/Sounds/backgroundMusic.wav");
     sourceCollision = load_sound("Assets/Sounds/CarCrash.wav");
-    sourcePassengerDlivered = load_sound("Assets/Sounds/PassengerSuccess.wav");
+    sourcePassengerDelivered = load_sound("Assets/Sounds/passengerDelivered.wav");
 
     playSound(sourceMusic);
 }
 
 void Engine::SoundSystem::update(Engine::deltaTime) {
-    /*
-
+    
 
     auto sounds = getEngine()->getSubSystem<EngineStore>()->getRoot().getComponentsOfType<Component::Sound>();
     for (auto sound : sounds)
     {
-        if (sound->name == "horn")
-        {
-            Engine::log<module, Engine::high>("Playing sound ", sound->name);
-            playSound(sourceHorn);
-            getEngine()->getSubSystem<EngineStore>()->getRoot().eraseComponent<Component::Sound>(sound);
-        }
-     */
-    auto sounds = getEngine()->getSubSystem<EngineStore>()->getRoot().getComponentsOfType<Component::Sound>();
-    for (auto sound : sounds)
-    {
+        
         if (sound->name == "acceleration")
         {
             Engine::log<module, Engine::high>("Playing sound ", sound->name);
@@ -88,7 +79,7 @@ void Engine::SoundSystem::update(Engine::deltaTime) {
         else if (sound->name == "passengerDroppedOff")
         {
             Engine::log<module, Engine::high>("Playing sound ", sound->name);
-            playSound(sourcePassengerDlivered);
+            playSound(sourcePassengerDelivered);
             getEngine()->getSubSystem<EngineStore>()->getRoot().eraseComponent<Component::Sound>(sound);
         }
     }
@@ -421,46 +412,12 @@ void Engine::SoundSystem::volumeUp()
 void Engine::SoundSystem::onKeyDown(const Component::EventArgs<int>& args)
 {
 
-
-
-    /*
-
-
-
-    auto key = args.get<0>();
-    if (key == GLFW_KEY_W)
-    {
-        playSound(sourceAcceleration);
-    }
-
-
-
-    else if (key == GLFW_KEY_S)
-    {
-        playSound(sourceBreaking);
-
-    }
-     */
-
+   
 }
 void  Engine::SoundSystem::onKeyUp(const Component::EventArgs<int>& args)
 {
 
-    /*
 
-    auto key = args.get<0>();
-    if (key == GLFW_KEY_W)
-    {
-        stopSound(sourceAcceleration);
-    }
-
-
-    else if (key == GLFW_KEY_S)
-    {
-        stopSound(sourceBreaking);
-    }
-
-    */
 }
 void Engine::SoundSystem::onKeyPress(const Component::EventArgs<int>& args)
 {
