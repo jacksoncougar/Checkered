@@ -423,7 +423,7 @@ void TestWorld::load() {
 
   //   spawn some ai bois into the world
   origin = {0, 0, 20};
-  for (int i = 1; i <= 5; i++) {
+  for (int i = 1; i <= 1; i++) {
     auto ai_vehicle = make_ai(glm::translate(
         i / 50.0f * 200.0f * glm::vec3{std::cos(i), std::acos(i / 200.0), std::sin(i)} -
         glm::vec3{0, 5, 0} + origin));

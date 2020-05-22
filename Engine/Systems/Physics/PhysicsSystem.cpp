@@ -137,7 +137,7 @@ void Physics::PhysicsSystem::initialize() {
   createDrivablePlayerVehicle();
   createPhysicsCallbacks();
 
-  std::cout << "Physics System Successfully Initalized" << std::endl;
+  std::cout << "Physics System Successfully Initialized" << std::endl;
 }
 
 using namespace Engine;

@@ -48,7 +48,6 @@
 
 #include "../snippetcommon/SnippetPrint.h"
 #include "../snippetcommon/SnippetPVD.h"
-#include "../snippetutils/SnippetUtils.h"
 
 
 using namespace physx;

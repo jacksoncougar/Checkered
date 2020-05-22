@@ -5,6 +5,11 @@ cmake_minimum_required(VERSION 3.12)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 
+
+message(STATUS "OKAY: ${PHYSX_COOKING_LIB}")
+message(STATUS "OKAY: ${PHYSX_COMMON_LIB}")
+
+
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set(GLAD ../Include/glad/src/glad.c)
@@ -104,40 +109,60 @@ endif ()
 # GAME ASSETS
 # copy assets into build directory
 
-set(PHYSX_HOME PATH "")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MSVC_COMPILE_FLAGS}")
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
-add_subdirectory("../Include/glfw-3.3.1" "${CMAKE_CURRENT_BINARY_DIR}/glfw")
+FIND_LIBRARY(PHYSX_64_LIB  NAMES PhysX_64)
+FIND_LIBRARY(PHYSXCHARACTERKINEMATIC_STATIC_64_LIB  NAMES PhysXCharacterKinematic_static_64)
+FIND_LIBRARY(PHYSXCOMMON_64_LIB  NAMES PhysXCommon_64)
+FIND_LIBRARY(PHYSXCOOKING_64_LIB  NAMES PhysXCooking_64)
+FIND_LIBRARY(PHYSXEXTENSIONS_STATIC_64_LIB  NAMES PhysXExtensions_static_64)
+FIND_LIBRARY(PHYSXFOUNDATION_64_LIB  NAMES PhysXFoundation_64)
+FIND_LIBRARY(PHYSXPVDSDK_STATIC_64_LIB  NAMES PhysXPvdSDK_static_64)
+FIND_LIBRARY(PHYSXTASK_STATIC_64_LIB  NAMES PhysXTask_static_64)
+FIND_LIBRARY(PHYSXVEHICLE_STATIC_64_LIB  NAMES PhysXVehicle_static_64)
+
+
+FIND_PATH(PHYSX_INCLUDE_DIRS PxPhysics.h PATH_SUFFIXES physx)
+message(STATUS ${PHYSX_INCLUDE_DIRS})
+
+message(STATUS ${PHYSX_64_LIB})
+message(STATUS ${PHYSXCHARACTERKINEMATIC_STATIC_64_LIB})
+message(STATUS ${PHYSXCOMMON_64_LIB})
+message(STATUS ${PHYSXCOOKING_64_LIB})
+message(STATUS ${PHYSXEXTENSIONS_STATIC_64_LIB})
+message(STATUS ${PHYSXFOUNDATION_64_LIB})
+message(STATUS ${PHYSXPVDSDK_STATIC_64_LIB})
+message(STATUS ${PHYSXTASK_STATIC_64_LIB})
+message(STATUS ${PHYSXVEHICLE_STATIC_64_LIB})
+
+
+find_package(OpenAL CONFIG REQUIRED)
+find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+find_package(glfw3 3 REQUIRED)
 
 target_link_libraries(Engine
         PRIVATE glfw
         PRIVATE SOIL
         PRIVATE freetype
 
+        PRIVATE OpenAL::OpenAL 
+        PRIVATE OpenGL::GL 
+
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rd-party/assimp/x64-Debug/lib/assimp-vc142-mt.lib
 
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rd-party/OpenAL/libs/Win64/OpenAL32.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysX_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXCharacterKinematic_static_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXCommon_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXCooking_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXExtensions_static_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXFoundation_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXPvdSDK_static_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXTask_static_64.lib
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../libs/x64/PhysXVehicle_static_64.lib
-        PRIVATE ${OPENGL_gl_LIBRARY})
+        PRIVATE ${PHYSX_64_LIB}
+        PRIVATE ${PHYSXCHARACTERKINEMATIC_STATIC_64_LIB}
+        PRIVATE ${PHYSXCOMMON_64_LIB}
+        PRIVATE ${PHYSXCOOKING_64_LIB}
+        PRIVATE ${PHYSXEXTENSIONS_STATIC_64_LIB}
+        PRIVATE ${PHYSXFOUNDATION_64_LIB}
+        PRIVATE ${PHYSXPVDSDK_STATIC_64_LIB}
+        PRIVATE ${PHYSXTASK_STATIC_64_LIB}
+        PRIVATE ${PHYSXVEHICLE_STATIC_64_LIB}
+
+       )
 
 configure_file("../dlls/assimp-vc142-mt.dll" assimp-vc142-mt.dll COPYONLY)
-configure_file("../dlls/PhysXGpu_64.dll" PhysXGpu_64.dll COPYONLY)
-configure_file("../dlls/PhysX_64.dll" PhysX_64.dll COPYONLY)
-configure_file("../dlls/PhysXCommon_64.dll" PhysXCommon_64.dll COPYONLY)
-configure_file("../dlls/PhysXCooking_64.dll" PhysXCooking_64.dll COPYONLY)
-configure_file("../dlls/PhysXDevice64.dll" PhysXDevice64.dll COPYONLY)
-configure_file("../dlls/PhysXFoundation_64.dll" PhysXFoundation_64.dll COPYONLY)
 configure_file("../dlls/glut32.dll" glut32.dll COPYONLY)
 
 find_package(OpenGL REQUIRED)
@@ -146,10 +171,8 @@ target_include_directories(Engine SYSTEM PRIVATE ${OPENGL_INCLUDE_DIR}
         PRIVATE "Components"
         PRIVATE "Systems"
         PRIVATE "Scenarios"
-        SYSTEM PRIVATE "../3rd-party/OpenAL/include"
-        SYSTEM PRIVATE "../Include/PhysX/include"
-        SYSTEM PRIVATE "../Include/PhysX/source/foundation/include"
-        SYSTEM PRIVATE "../Include/PxShared/include"
+        SYSTEM PRIVATE OpenAL::OpenAL
+        PRIVATE ${PHYSX_INCLUDE_DIRS}
         SYSTEM PRIVATE "../Include/include"
         SYSTEM PRIVATE "../Include/glminclude"
         SYSTEM PRIVATE ../3rd-party/assimp/x64-Debug/include

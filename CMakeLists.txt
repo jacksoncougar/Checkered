@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.12)
 project("Engine")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(OpenGL REQUIRED)
+find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
 set(FREETYPE_DIR 3rd-party/freetype-2.10.0)
 add_subdirectory(3rd-party/freetype-2.10.0)

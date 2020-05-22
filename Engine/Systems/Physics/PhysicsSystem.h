@@ -95,8 +95,6 @@ namespace Physics {
         void onPassengerCreated(Passenger *passenger);
     };
 
-
-
 }
 
 namespace physx {
